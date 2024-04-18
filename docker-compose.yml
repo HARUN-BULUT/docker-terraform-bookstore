@@ -1,0 +1,30 @@
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "pl123456"
+      MYSQL_USER: "clarusway"
+      MYSQL_PASSWORD: "Clarusway_1"
+      MYSQL_DATABASE: "bookstore_db"
+    networks:
+      - books-net
+
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+  bookstore:
+    # build: . (alttaki image kismini yazmasak bu komutla bulundugu dizinde image olusturam islemi yapcak. alttaki image kismini calismasi icin onceden image build etmemiz lazim docker build -t bookstoreapi yamamiz lazim)
+    image: "bookstoreapi:latest"
+    networks:
+      - books-net
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - "80:80"
+
+networks:
+  books-net:
+
+volumes:
+  mysql-volume:
